@@ -12,12 +12,13 @@ import useProduct from "../hooks/useProduct";
 
 const ProductList = () => {
   const [page, setPage] = useState(1);
-    const {products, isLoading, error, totalPages, fetchProducts} = useProduct();
+  const { products, isLoading, error, totalPages, fetchProducts } =
+    useProduct();
 
   const handlePagechange = (e, value) => {
     setPage(value);
   };
-  
+
   useEffect(() => {
     fetchProducts(page);
   }, [page]);
@@ -40,7 +41,21 @@ const ProductList = () => {
           <Typography variant="h3" gutterBottom>
             Product List
           </Typography>
-          <Grid container spacing={5}>
+          <Grid
+            container
+            spacing={5}
+            xs={1}
+            sm={3}
+            md={4}
+            sx={{
+              backgroundColor: "#E5E4E2",
+              padding: "2rem",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "10px",
+            }}
+          >
             {products.map((product) => (
               <Grid item={true.toString()} key={product.id}>
                 <Product data={product} />
