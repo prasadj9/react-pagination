@@ -9,7 +9,7 @@ const Product = ({data}) => {
     <Card sx={{ maxWidth: 350 }}>
       <CardMedia
         component="img"
-        sx={{ height: "auto" }}
+        sx={{ height: "40%" }}
         image={ data.thumbnail}
         title={data.title}
         loading="lazy"

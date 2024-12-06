@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid2";
 import React, { useEffect, useState } from "react";
 import Product from "./Product";
 import useProduct from "../hooks/useProduct";
+import SkeletonProduct from "./SkeletonProduct";
 
 const ProductList = () => {
   const [page, setPage] = useState(1);
@@ -36,7 +37,6 @@ const ProductList = () => {
     >
       {isLoading && <CircularProgress />}
       {error && <Typography color="error"> {error} </Typography>}
-      {!isLoading && !error && (
         <>
           <Typography variant="h3" gutterBottom>
             Product List
@@ -49,7 +49,7 @@ const ProductList = () => {
             md={4}
             sx={{
               backgroundColor: "#E5E4E2",
-              padding: "2rem",
+              padding: "1rem",
               width: "100%",
               justifyContent: "center",
               alignItems: "center",
@@ -58,7 +58,7 @@ const ProductList = () => {
           >
             {products.map((product) => (
               <Grid item={true.toString()} key={product.id}>
-                <Product data={product} />
+                {isLoading ? <SkeletonProduct /> : <Product data={product} />}
               </Grid>
             ))}
           </Grid>
@@ -81,7 +81,6 @@ const ProductList = () => {
             />
           </Stack>
         </>
-      )}
     </Box>
   );
 };
