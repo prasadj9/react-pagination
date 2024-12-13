@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useProduct = () => {
   const [products, setProducts] = useState([]);
@@ -7,7 +7,7 @@ const useProduct = () => {
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const limit = 12;
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page = 1) => {
     try {
       setIsLoading(true);
       const { data } = await axios.get(
@@ -22,6 +22,11 @@ const useProduct = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts(1);
+  }, [])
+
   return { products, totalPages, isLoading, error, fetchProducts };
 };
 
