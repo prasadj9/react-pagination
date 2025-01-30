@@ -10,23 +10,27 @@ import {
   import React, { useEffect, useState } from "react";
   import Product from "./Product";
   import SkeletonProduct from "./SkeletonProduct";
-import { fetchProductList } from "../store/productSlice";
-import { useDispatch, useSelector } from 'react-redux';
 import useDebounce from "../hooks/useDebounce";
+import useProductStore from "../app/productStore";
   
-  const ProductListRedux = () => {
+  const ProductListZustand = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const debounceSearch = useDebounce(searchTerm, 500);
     const [page, setPage] = useState(1);
-    const dispatch = useDispatch();
-    const {isLoading, error, products, totalPages} = useSelector(store => store?.products)
+    const totalPages = useProductStore((state) => state.totalPages)
+    const products = useProductStore((state) => state.products)
+    const error = useProductStore((state) => state.error)
+    const fetchProducts = useProductStore((state) => state.fetchProducts)
+    const isLoading = useProductStore((state) => state.isLoading)
+
+    console.log("Rendered")
   
     const handlePagechange = (e, value) => {
       setPage(value);
     };
   
     useEffect(() => {
-      dispatch(fetchProductList({page, search : debounceSearch}));
+      fetchProducts({page, search : debounceSearch});
     }, [page, debounceSearch]);
 
     return (
@@ -41,7 +45,7 @@ import useDebounce from "../hooks/useDebounce";
           padding: "20px",
         }}
       >
-        {isLoading && <CircularProgress />}
+        {isLoading && !products.length &&  <CircularProgress />}
         {error && <Typography color="error"> {error} </Typography>}
           <>
           <Stack direction="row" alignItems="center" justifyContent="center" spacing={2}>
@@ -65,7 +69,10 @@ import useDebounce from "../hooks/useDebounce";
                 borderRadius: "10px",
               }}
             >
-              {products.map((product) => (
+                {/* { isLoading && !products?.length && Array.from({length : 12}, (_, i) => (
+                    <SkeletonProduct key={`skeleton-${i}`}/>
+                ))} */}
+              {products?.map((product) => (
                 <Grid item={true.toString()} key={product.id}>
                   {isLoading ? <SkeletonProduct /> : <Product data={product} />}
                 </Grid>
@@ -95,5 +102,5 @@ import useDebounce from "../hooks/useDebounce";
     );
   };
   
-  export default ProductListRedux;
+  export default ProductListZustand;
   
